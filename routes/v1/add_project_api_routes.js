@@ -5,8 +5,8 @@ module.exports = {
 
         // API Add Project API
         // headers: user_token
-        // params: project_id
-        // Functions: verify_user_details, delete_project
+        // params: project_id, pathname, params, response
+        // Functions: verify_user_details, add_project_api
         // Response: status, message
         app.post('/add_project_api', function (req, res) {
              try {
