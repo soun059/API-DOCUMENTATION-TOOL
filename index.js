@@ -16,6 +16,7 @@ var get_active_projects_routes = require('./routes/v1/get_active_projects_routes
 var delete_project_routes = require('./routes/v1/delete_project_route');
 var add_project_api_routes = require('./routes/v1/add_project_api_routes');
 var delete_project_api_routes = require('./routes/v1/delete_project_api_routes');
+var get_project_apis_routes = require('./routes/v1/get_project_apis_routes');
 
 // Configuring Port
 app.set('port', (process.env.PORT || 8005));
@@ -50,6 +51,7 @@ mongo.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function
     delete_project_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
     add_project_api_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
     delete_project_api_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
+    get_project_apis_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
 
     app.listen(app.get('port'), function () {
         console.log('Node app is running on port', app.get('port'));

@@ -17,7 +17,10 @@ module.exports = function (mongo, ObjectID, url, assert, dbb, db) {
                     if (err) {
                         callBack(null, true, "Error occured while deleting the project");
                     } else {
-                        callBack(result, false, "Project deleted successfully!");
+                        if (result.modifiedCount)
+                            callBack(result, false, "Project deleted successfully!");
+                        else 
+                            callBack(result, true, "Project cannot be deleted");
                     }
                 });
             } catch (error) {
