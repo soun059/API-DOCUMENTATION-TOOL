@@ -42,7 +42,6 @@ module.exports = {
                                 message: message
                             });
                         } else {
-                            console.log(config.get('secret'))
                             // Create the jwt token
                             const token = jwt.sign(
                                 { data: result.ops },
