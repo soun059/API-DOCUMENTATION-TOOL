@@ -29,12 +29,21 @@ module.exports = {
 
             add_user_module.check_existing_google_user(req.user.id, function (result, error, message) {
                 if (error) {
+                    // User exits, so no need to add the user to database, but generate the jwt token and send it back
+                    const token = jwt.sign(
+                        { data: result },
+                        config.get("secret"),
+                        {
+                            expiresIn: 604800 // 1 week
+                        }
+                    );
                     res.json({
-                        status: false,
-                        message: message
+                        status: true,
+                        message: "Login Successful",
+                        token: "Bearer " + token
                     })
                 } else {
-                    // User does not exists so create a new one
+                    // User does not exists so create a new one and then send the jwt token
                     add_user_module.add_user(new_user, function (result, error, message) {
                         if (error) {
                             res.json({

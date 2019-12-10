@@ -59,7 +59,7 @@ module.exports = function (mongo, ObjectID, url, assert, dbb, db) {
                         callBack(null, true, "Google user already exists");  
                     } else {
                         if (response.length > 0)
-                            callBack(null, true, "Google user already exist");
+                            callBack(response, true, "Google user already exist");
                         else 
                             callBack(null, false, "Google user does not exist");
                     }
