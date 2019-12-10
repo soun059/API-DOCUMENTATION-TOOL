@@ -40,7 +40,7 @@ module.exports = function (mongo, ObjectID, url, assert, dbb, db) {
                         if (err) {
                             callBack(null, true, "User cannot be added");
                         } else {
-                            callBack(null, false, "User added successfully");
+                            callBack(response, false, "User added successfully");
                         }     
                 });
             } catch (error) {
@@ -48,6 +48,27 @@ module.exports = function (mongo, ObjectID, url, assert, dbb, db) {
             }
         },
         // End of add_user module
+
+        // Start of check an existing google user
+        check_existing_google_user: function (googleID, callBack) {
+            try {
+                db.db().collection(dbb.USERDETAILS).find({
+                    "googleID": googleID
+                }).toArray((err, response) => {
+                    if (err) {
+                        callBack(null, true, "Google user already exists");  
+                    } else {
+                        if (response.length > 0)
+                            callBack(null, true, "Google user already exist");
+                        else 
+                            callBack(null, false, "Google user does not exist");
+                    }
+                });
+            } catch (error) {
+                callBack(null, true, error);
+            }
+        },   
+        // End of check an existing google user
 
         // Start of send_mail module
         send_mail: function (receiver_name, receiver_email, callBack) {

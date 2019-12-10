@@ -32,12 +32,14 @@ module.exports = {
               message
             ) {
               if (error) {
+            //    console.log('here')
                 res.json({
                   status: false,
                   message: message
                 });
               } else {
                 // If token is verified successfully, then add a user (result contains the id of the client)
+                // console.log("id  " + result)
                 let new_user = {
                   name: req.body.name,
                   email: req.body.email,

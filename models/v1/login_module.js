@@ -18,6 +18,7 @@ module.exports = function(mongo, ObjectID, url, assert, dbb, db) {
             if (err) {
               callBack(null, true, "Error occured");
             } else {
+              
                 if (response.length != 0) {
                     // If login successful, then create JWT token
                     const token = jwt.sign(
@@ -39,6 +40,10 @@ module.exports = function(mongo, ObjectID, url, assert, dbb, db) {
       }
     }
     // End of login_user
+
+    // Start of google_login
+    
+    // End of google_login
   };
 
   return login_module;
