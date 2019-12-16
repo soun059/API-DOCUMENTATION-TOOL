@@ -1,3 +1,5 @@
 node_modules
 .env
 switcher_backup.env 
+config / database.js 
+config / default.json
