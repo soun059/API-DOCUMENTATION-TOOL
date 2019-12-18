@@ -42,8 +42,7 @@ var db;
 
 if (prod) {
     var prod_url = require('./config/database');
-    url = prod_url;
-}
+    url = prod_url;}
 
 // Mongo Connection
 mongo.connect(url, {
