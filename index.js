@@ -20,6 +20,7 @@ var delete_project_api_routes = require('./routes/v1/delete_project_api_routes')
 var get_project_apis_routes = require('./routes/v1/get_project_apis_routes');
 var google_routes = require('./routes/v1/google_login_routes');
 var github_login_routes = require('./routes/v1/github_login_routes');
+var edit_project_routes = require('./routes/v1/edit_project_routes');
 
 // Configuring Port
 app.set('port', (process.env.PORT || 8005));
@@ -63,6 +64,7 @@ mongo.connect(url, {
     get_project_apis_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
     google_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
     github_login_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
+    edit_project_routes.configure(app, mongo, ObjectID, url, assert, dbb, db);
 
     app.listen(app.get('port'), function () {
         console.log('Node app is running on port', app.get('port'));
