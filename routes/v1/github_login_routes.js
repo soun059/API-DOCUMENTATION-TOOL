@@ -1,6 +1,6 @@
 // REQURE
 const passport = require('passport');
-const passportService = require('../../services/google_passport');
+const passportServiceGitHub = require('../../services/github_passport');
 const config = require("config");
 const jwt = require("jsonwebtoken");
 
@@ -8,35 +8,36 @@ module.exports = {
     configure: function (app, mongo, ObjectID, url, assert, dbb, db) {
         const add_user_module = require('../../models/v1/add_user_module')(module, ObjectID, url, assert, dbb, db);
 
-       // Passport middleware 
-       app.use(passport.initialize());
-        // Google Login
-        app.get('/auth/google', passport.authenticate('google', {
+        // Passport middleware 
+        app.use(passport.initialize());
+
+        // GitHub Login
+        app.get('/auth/github', passport.authenticate('github', {
             scope: ['profile', 'email']
         }));
 
-        // CallBack URL for Google login
-        app.get('/auth/google/redirect', passport.authenticate('google', { session: false }), (req, res) => {
-            //  console.log(req.user)
-            // Save the user to database
+        // GitHub CallBack
+        app.get('/auth/github/redirect', passport.authenticate('github', { session: false }), (req, res) => {
+          //  console.log(req.user._json);
             const new_user = {
-                googleID: req.user.id,
+                githubID: req.user.id,
                 name: req.user.displayName,
-                email: req.user.emails[0].value,
-                type: "google_account",
+                email: req.user._json.email,
+                type: "github_account",
                 active: true,
             };
 
-            add_user_module.check_existing_google_user(req.user.id, function (result, error, message) {
+            add_user_module.check_existing_github_user(req.user.id, function (result, error, message) {
                 if (error) {
                     // User exits, so no need to add the user to database, but generate the jwt token and send it back
+                //    console.log(result)
                     const token = jwt.sign(
                         { data: result },
                         config.get("secret"),
                         {
                             expiresIn: 604800 // 1 week
                         }
-                    ); 
+                    );
                     res.json({
                         status: true,
                         message: "Login Successful",
@@ -51,7 +52,8 @@ module.exports = {
                                 message: message
                             });
                         } else {
-                            // Create the jwt token 
+                            // Create the jwt token
+                    //        console.log(result)
                             const token = jwt.sign(
                                 { data: result.ops },
                                 config.get("secret"),
@@ -68,8 +70,7 @@ module.exports = {
                         }
                     });
                 }
-            });
+            }); 
         });
-
     }
 }

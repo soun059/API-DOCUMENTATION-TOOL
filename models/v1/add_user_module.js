@@ -70,6 +70,27 @@ module.exports = function (mongo, ObjectID, url, assert, dbb, db) {
         },   
         // End of check an existing google user
 
+        // Start of check an existing github user
+        check_existing_github_user: function (githubID, callBack) {
+            try {
+                db.db().collection(dbb.USERDETAILS).find({
+                    "githubID": githubID
+                }).toArray((err, response) => {
+                    if (err) {
+                        callBack(null, true, "GitHub user already exists");  
+                    } else {
+                        if (response.length > 0)
+                            callBack(response, true, "GitHub user already exist");
+                        else 
+                            callBack(null, false, "GitHub user does not exist");
+                    }
+                });
+            } catch (error) {
+                callBack(null, true, error);
+            }
+        },   
+        // End of check an existing github user
+
         // Start of send_mail module
         send_mail: function (receiver_name, receiver_email, callBack) {
             const OAuth2 = google.auth.OAuth2;
