@@ -14,7 +14,7 @@ module.exports = {
                 // Token sent through header from client
                 let user_token = req.headers['x-access-token'] || req.headers['authorization'];
                 if (user_token) {
-                    if (req.body.hasOwnProperty("project_id")) {
+                    if (req.body.hasOwnProperty("project_id_list")) {
                          // Verify the user_token
                         add_user_module.verify_user_details(user_token, function (result, error, message) {
                             if (error) {
@@ -24,26 +24,32 @@ module.exports = {
                                 });      
                             } else {
                                 // Token is verified successfully, so delete the project
-                                delete_project_module.delete_project(req.body.project_id, function (result, error, message) {
-                                    if (error) {
-                                        res.json({
-                                            status: false,
-                                            message: message
-                                        });
-                                    } else {
-                                        res.json({
-                                            status: true,
-                                            message: message
-                                        });
-                                    } 
-                                });
+                                let project_id_list = []
+                                project_id_list =  req.body.project_id_list;
+                                for (let i = 0; i < project_id_list.length; i++) {
+                                    delete_project_module.delete_project(req.body.project_id_list[i], function (result, error, message) {
+                                        if (error) {
+                                            res.json({
+                                                status: false,
+                                                message: message
+                                            });
+                                        } else {
+                                            if (i == project_id_list.length - 1) {
+                                                res.json({
+                                                    status: true,
+                                                    message: message
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
                             } 
                         });
                     } else {
-                        if (req.body.hasOwnProperty("project_id") == false) {
+                        if (req.body.hasOwnProperty("project_id_list") == false) {
                             res.json({
                                 status: false,
-                                message: "project_id parameter is missing"
+                                message: "project_id_list parameter is missing"
                             });
                         }
                     }
